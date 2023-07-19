@@ -1,0 +1,65 @@
+# Define the version of Docker Compose to use
+version: '3.8'
+# Define the services that make up the application
+services:
+  # Define the beth-db service
+  beth-db:
+    # Use the postgres image
+    image: postgres
+    # Restart the container automatically if it stops
+    restart: always
+    # Mount the local ./data/db-beth directory to the container's /var/lib/postgresql/data directory
+    volumes:
+      - ./data/db-beth:/var/lib/postgresql/data
+    # Expose the container's port 5432 to the host's port 5434
+    ports:
+      - 5434:5432
+    # Set environment variables for the container
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: beth
+    # Connect the container to the imagineers network
+    networks:
+      - imagineers
+
+  # Define the beth-test-db service
+  beth-test-db:
+    # Use the postgres image
+    image: postgres
+    # Restart the container automatically if it stops
+    restart: always
+    # Mount the local ./data/db-beth-test directory to the container's /var/lib/postgresql/data directory
+    volumes:
+      - ./data/db-beth-test:/var/lib/postgresql/data
+    # Expose the container's port 5432 to the host's port 5435
+    ports:
+      - 5435:5432
+    # Set environment variables for the container
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: beth
+    # Connect the container to the imagineers network
+    networks:
+      - imagineers
+
+  # Define the adminer service
+  adminer:
+    # Use the adminer image
+    image: adminer
+    # Restart the container automatically if it stops
+    restart: always
+    # Expose the container's port 8080 to the host's port 8090
+    ports:
+      - 8090:8080
+    # Connect the container to the imagineers network
+    networks:
+      - imagineers
+
+# Define the network that the containers will use
+networks:
+  # Define the imagineers network
+  imagineers:
+    # Use an external network
+    external: true

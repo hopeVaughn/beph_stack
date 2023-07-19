@@ -1,0 +1,25 @@
+{
+  "name": "hi-elysia",
+  "version": "1.0.44",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "bun run --watch src/index.tsx",
+    "db:migrate":"bunx drizzle-kit generate:pg",
+    "db:push":"bunx drizzle-kit push:pg",
+    "db:studio":"bunx drizzle-kit studio"
+  },
+  "dependencies": {
+    "@elysiajs/html": "^0.5.2",
+    "dotenv": "^16.3.1",
+    "drizzle-orm": "^0.27.2",
+    "elysia": "latest",
+    "pg": "^8.11.1"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.10.2",
+    "bun-types": "^0.6.14",
+    "drizzle-kit": "^0.19.8",
+    "typed-html": "^3.0.1"
+  },
+  "module": "src/index.js"
+}
