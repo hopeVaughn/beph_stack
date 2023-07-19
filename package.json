@@ -1,6 +1,8 @@
 {
   "name": "hi-elysia",
   "version": "1.0.44",
+  "type": "module",
+  "module": "src/index.tsx",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun run --watch src/index.tsx",
@@ -20,6 +22,5 @@
     "bun-types": "^0.6.14",
     "drizzle-kit": "^0.19.8",
     "typed-html": "^3.0.1"
-  },
-  "module": "src/index.js"
+  }
 }

@@ -25,7 +25,13 @@ const app = new Elysia()
     "/todos/toggle/:id",
     async ({ params }) => {
       const oldTodo = await db.select().from(todos).where(eq(todos.id, params.id as any))
+      const newTodo = await db
+        .update(todos)
+        .set({ completed: !oldTodo[0].completed })
+        .where(eq(todos.id, params.id as any))
+        .returning()
       console.log(oldTodo)
+      return <TodoItem {...newTodo[0]} />
     },
     {
       params: t.Object({
@@ -35,11 +41,8 @@ const app = new Elysia()
   )
   .delete(
     "/todos/:id",
-    ({ params }) => {
-      const todo = db.find((todo) => todo.id === params.id);
-      if (todo) {
-        db.splice(db.indexOf(todo), 1);
-      }
+    async ({ params }) => {
+      await db.delete(todos).where(eq(params.id as any, todos.id,)).returning();
     },
     {
       params: t.Object({
@@ -49,17 +52,13 @@ const app = new Elysia()
   )
   .post(
     "/todos",
-    ({ body }) => {
+    async ({ body }) => {
       if (body.content.length === 0) {
         throw new Error("Content cannot be empty")
       }
-      const newTodo = {
-        id: db.length + 1,
-        content: body.content,
-        completed: false
-      };
-      db.push(newTodo);
-      return <TodoItem {...newTodo} />
+      const newTodo = await db
+        .insert(todos).values(body).returning()
+      return <TodoItem {...newTodo[0]} />
     },
     {
       body: t.Object({
@@ -82,6 +81,7 @@ const BaseHTML = ({ children }: elements.Children) => `
     <title>BETH STACK</title>
     <script src="https://unpkg.com/htmx.org@1.9.3"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/hyperscript.org@0.9.9"></script>
   </head>
 
   ${children}
@@ -124,17 +124,10 @@ function TodoForm() {
       class="flex flex-row space-x-3"
       hx-post="/todos"
       hx-swap="beforebegin"
+      _="on submit target.reset()"
     >
-      <input
-        type="text"
-        name="content"
-        class="border border-black"
-      />
-      <button
-        type="submit"
-      >
-        Add
-      </button>
+      <input type="text" name="content" class="border border-black" />
+      <button type="submit">Add</button>
     </form>
   )
 }
