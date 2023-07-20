@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "3a3f1e29-d250-48c4-9f1e-6459b22c2354",
+  "id": "bc450141-c673-41e4-a0d2-9405613aa0d3",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "todos": {
@@ -13,7 +13,7 @@
           "type": "uuid",
           "primaryKey": true,
           "notNull": true,
-          "default": "get_random_uuid()"
+          "default": "gen_random_uuid()"
         },
         "content": {
           "name": "content",
