@@ -42,11 +42,12 @@ const app = new Elysia()
   .delete(
     "/todos/:id",
     async ({ params }) => {
-      await db.delete(todos).where(eq(todos.id, params.id as any)).returning();
+      await db.delete(todos).where(eq(todos.id, params.id as any));
+
     },
     {
       params: t.Object({
-        id: t.Numeric()
+        id: t.String()
       }),
     }
   )
